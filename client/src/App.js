@@ -1,22 +1,30 @@
 
 import './App.css';
-import { ApolloClient, InMemoryCache, ApolloProvider, useQuery}  from '@apollo/client'
 import DisplayData from './DisplayData';
+import { Client, cacheExchange, fetchExchange } from '@urql/core';
+import { createClient, Provider } from "urql"
 
 function App() {
 
-  const client = new ApolloClient({
-    cache: new InMemoryCache(),
-    uri: "http://localhost:4000/graphql",
-  })
+  const client = new Client({
+    url: 'https://app-api.tronhouse.vn/graphql',
+    exchanges: [cacheExchange, fetchExchange],
+    fetchOptions: {
+      headers: {
+        "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHRyb25ob3VzZS52biIsImlkIjoiMjk2MTYwOGUtNTBlYi00YzhmLTlhOTItYTlmOTY2NzUyYWRhIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiQWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.qJ9sGMQOcX-josBu6JfE1UqSuFckKWvB1RCXZjXvzvA",
+        "x-website-name": "tronhouse.vn"
+      },
+    }
+  });
+  
 
 
   return  (
-    <ApolloProvider client={client}>
+    <Provider value={client}>
       <div className="App">
         <DisplayData />
       </div>
-    </ApolloProvider>
+    </Provider>
     );
 }
 
